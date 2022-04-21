@@ -138,7 +138,7 @@ install_soft() {
 install_dashboard() {
     install_base
 
-    echo -e "> 安装面板"
+    echo -e "> installation panel"
 
     # 哪吒监控文件夹
     mkdir -p $NZ_DASHBOARD_PATH
