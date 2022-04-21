@@ -2,8 +2,8 @@
 
 #========================================================
 #   System Required: CentOS 7+ / Debian 8+ / Ubuntu 16+ /
-#     Arch 未测试
-#   Description: 哪吒监控安装脚本
+#     Arch Not tested
+#   Description: Nezha monitoring installation script
 #   Github: https://github.com/naiba/nezha
 #========================================================
 
@@ -449,23 +449,23 @@ clean_all() {
 }
 
 show_usage() {
-    echo "哪吒监控 管理脚本使用方法: "
+    echo "How to use Nezha monitoring management script: "
     echo "--------------------------------------------------------"
-    echo "./nezha.sh                            - 显示管理菜单"
-    echo "./nezha.sh install_dashboard          - 安装面板端"
-    echo "./nezha.sh modify_dashboard_config    - 修改面板配置"
-    echo "./nezha.sh start_dashboard            - 启动面板"
-    echo "./nezha.sh stop_dashboard             - 停止面板"
-    echo "./nezha.sh restart_and_update         - 重启并更新面板"
-    echo "./nezha.sh show_dashboard_log         - 查看面板日志"
-    echo "./nezha.sh uninstall_dashboard        - 卸载管理面板"
+    echo "./nezha.sh                            - Show admin menu"
+    echo "./nezha.sh install_dashboard          - Install panel end"
+    echo "./nezha.sh modify_dashboard_config    - Modify panel configuration"
+    echo "./nezha.sh start_dashboard            - launchpad"
+    echo "./nezha.sh stop_dashboard             - stop panel"
+    echo "./nezha.sh restart_and_update         - Reboot and update the panel"
+    echo "./nezha.sh show_dashboard_log         - View panel logs"
+    echo "./nezha.sh uninstall_dashboard        - Uninstall the admin panel"
     echo "--------------------------------------------------------"
-    echo "./nezha.sh install_agent              - 安装监控Agent"
-    echo "./nezha.sh modify_agent_config        - 修改Agent配置"
-    echo "./nezha.sh show_agent_log             - 查看Agent日志"
-    echo "./nezha.sh uninstall_agent            - 卸载Agen"
-    echo "./nezha.sh restart_agent              - 重启Agen"
-    echo "./nezha.sh update_script              - 更新脚本"
+    echo "./nezha.sh install_agent              - installation monitoring Agent"
+    echo "./nezha.sh modify_agent_config        - Modify Agent Configuration"
+    echo "./nezha.sh show_agent_log             - View Agent logs"
+    echo "./nezha.sh uninstall_agent            - Uninstall Agent"
+    echo "./nezha.sh restart_agent              - Restart Agent"
+    echo "./nezha.sh update_script              - update script"
     echo "--------------------------------------------------------"
 }
 
@@ -473,25 +473,25 @@ show_menu() {
     echo -e "
     ${green}哪吒监控管理脚本${plain} ${red}${NZ_VERSION}${plain}
     --- https://github.com/naiba/nezha ---
-    ${green}1.${plain}  安装面板端
-    ${green}2.${plain}  修改面板配置
-    ${green}3.${plain}  启动面板
-    ${green}4.${plain}  停止面板
-    ${green}5.${plain}  重启并更新面板
-    ${green}6.${plain}  查看面板日志
-    ${green}7.${plain}  卸载管理面板
+    ${green}1.${plain}  Install panel end
+    ${green}2.${plain}  Modify panel configuration
+    ${green}3.${plain}  launchpad
+    ${green}4.${plain}  stop panel
+    ${green}5.${plain}  Reboot and update the panel
+    ${green}6.${plain}  View panel logs
+    ${green}7.${plain}  Uninstall the admin panel
     ————————————————-
-    ${green}8.${plain}  安装监控Agent
-    ${green}9.${plain}  修改Agent配置
-    ${green}10.${plain} 查看Agent日志
-    ${green}11.${plain} 卸载Agent
-    ${green}12.${plain} 重启Agent
+    ${green}8.${plain}  Install Monitoring Agent
+    ${green}9.${plain}  Modify Agent Configuration
+    ${green}10.${plain} View Agent logs
+    ${green}11.${plain} Uninstall Agent
+    ${green}12.${plain} Restart Agent
     ————————————————-
-    ${green}13.${plain} 更新脚本
+    ${green}13.${plain} update script
     ————————————————-
-    ${green}0.${plain}  退出脚本
+    ${green}0.${plain}  exit script
     "
-    echo && read -ep "请输入选择 [0-13]: " num
+    echo && read -ep "Please enter a selection [0-13]: " num
 
     case "${num}" in
     0)
