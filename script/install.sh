@@ -29,7 +29,7 @@ pre_check() {
     fi
 
     # check root
-    [[ $EUID -ne 0 ]] && echo -e "${red}错误: ${plain} This script must be run as root user！\n" && exit 1
+    [[ $EUID -ne 0 ]] && echo -e "${red}mistake: ${plain} This script must be run as root user！\n" && exit 1
 
     ## os_arch
     if [[ $(uname -m | grep 'x86_64') != "" ]]; then
