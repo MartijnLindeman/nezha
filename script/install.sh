@@ -24,12 +24,12 @@ os_arch=""
 pre_check() {
     command -v systemctl >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo "不支持此系统：未找到 systemctl 命令"
+        echo "This system is not supported: systemctl command not found"
         exit 1
     fi
 
     # check root
-    [[ $EUID -ne 0 ]] && echo -e "${red}错误: ${plain} 必须使用root用户运行此脚本！\n" && exit 1
+    [[ $EUID -ne 0 ]] && echo -e "${red}错误: ${plain} This script must be run as root user！\n" && exit 1
 
     ## os_arch
     if [[ $(uname -m | grep 'x86_64') != "" ]]; then
@@ -49,8 +49,8 @@ pre_check() {
     ## China_IP
     if [[ -z "${CN}" ]]; then
         if [[ $(curl -m 10 -s https://ipapi.co/json | grep 'China') != "" ]]; then
-            echo "根据ipapi.co提供的信息，当前IP可能在中国"
-            read -e -r -p "是否选用中国镜像完成安装? [Y/n] " input
+            echo "According to the information provided by ipapi.co, the current IP may be in China"
+            read -e -r -p "Whether to choose a Chinese mirror to complete the installation? [Y/n] " input
             case $input in
             [yY][eE][sS] | [yY])
                 echo "使用中国镜像"
@@ -100,18 +100,18 @@ confirm() {
 }
 
 update_script() {
-    echo -e "> 更新脚本"
+    echo -e "> update script"
 
     curl -sL https://${GITHUB_RAW_URL}/script/install.sh -o /tmp/nezha.sh
     new_version=$(cat /tmp/nezha.sh | grep "NZ_VERSION" | head -n 1 | awk -F "=" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
     if [ ! -n "$new_version" ]; then
-        echo -e "脚本获取失败，请检查本机能否链接 https://${GITHUB_RAW_URL}/script/install.sh"
+        echo -e "Failed to get the script, please check whether the machine can be linked https://${GITHUB_RAW_URL}/script/install.sh"
         return 1
     fi
-    echo -e "当前最新版本为: ${new_version}"
+    echo -e "The latest version is: ${new_version}"
     mv -f /tmp/nezha.sh ./nezha.sh && chmod a+x ./nezha.sh
 
-    echo -e "3s后执行新脚本"
+    echo -e "Execute new script after 3s"
     sleep 3s
     clear
     exec ./nezha.sh
@@ -140,13 +140,13 @@ install_dashboard() {
 
     echo -e "> installation panel"
 
-    # 哪吒监控文件夹
+    # Nezha monitoring folder
     mkdir -p $NZ_DASHBOARD_PATH
     chmod 777 -R $NZ_DASHBOARD_PATH
 
     command -v docker >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo -e "正在安装 Docker"
+        echo -e "Installing Docker"
         bash <(curl -sL https://${Get_Docker_URL}) ${Get_Docker_Argu} >/dev/null 2>&1
         if [[ $? != 0 ]]; then
             echo -e "${red}下载脚本失败，请检查本机能否连接 ${Get_Docker_URL}${plain}"
@@ -159,10 +159,10 @@ install_dashboard() {
 
     command -v docker-compose >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo -e "正在安装 Docker Compose"
+        echo -e "Installing Docker Compose"
         wget -O /usr/local/bin/docker-compose "https://${GITHUB_URL}/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" >/dev/null 2>&1
         if [[ $? != 0 ]]; then
-            echo -e "${red}下载脚本失败，请检查本机能否连接 ${GITHUB_URL}${plain}"
+            echo -e "${red}The download script failed, please check whether the machine can be connected ${GITHUB_URL}${plain}"
             return 0
         fi
         chmod +x /usr/local/bin/docker-compose
@@ -179,9 +179,9 @@ install_dashboard() {
 install_agent() {
     install_base
 
-    echo -e "> 安装监控Agent"
+    echo -e "> Install Monitoring Agent"
 
-    echo -e "正在获取监控Agent版本号"
+    echo -e "Getting the monitoring agent version number"
 
     local version=$(curl -m 10 -sL "https://api.github.com/repos/naiba/nezha/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
     if [ ! -n "$version" ]; then
@@ -189,17 +189,17 @@ install_agent() {
     fi
 
     if [ ! -n "$version" ]; then
-        echo -e "获取版本号失败，请检查本机能否链接 https://api.github.com/repos/naiba/nezha/releases/latest"
+        echo -e "Failed to get the version number, please check whether the machine can be linked https://api.github.com/repos/naiba/nezha/releases/latest"
         return 0
     else
-        echo -e "当前最新版本为: ${version}"
+        echo -e "The latest version is: ${version}"
     fi
 
     # 哪吒监控文件夹
     mkdir -p $NZ_AGENT_PATH
     chmod 777 -R $NZ_AGENT_PATH
 
-    echo -e "正在下载监控端"
+    echo -e "Downloading monitor"
     wget -O nezha-agent_linux_${os_arch}.tar.gz https://${GITHUB_URL}/naiba/nezha/releases/download/${version}/nezha-agent_linux_${os_arch}.tar.gz >/dev/null 2>&1
     if [[ $? != 0 ]]; then
         echo -e "${red}Release 下载失败，请检查本机能否连接 ${GITHUB_URL}${plain}"
@@ -221,21 +221,21 @@ install_agent() {
 }
 
 modify_agent_config() {
-    echo -e "> 修改Agent配置"
+    echo -e "> Modify Agent Configuration"
 
     wget -O $NZ_AGENT_SERVICE https://${GITHUB_RAW_URL}/script/nezha-agent.service >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo -e "${red}文件下载失败，请检查本机能否连接 ${GITHUB_RAW_URL}${plain}"
+        echo -e "${red}The file download failed, please check whether the machine can be connected ${GITHUB_RAW_URL}${plain}"
         return 0
     fi
 
     if [ $# -lt 3 ]; then
-        echo "请先在管理面板上添加Agent，记录下密钥" &&
-            read -ep "请输入一个解析到面板所在IP的域名（不可套CDN）: " nz_grpc_host &&
-            read -ep "请输入面板RPC端口: (5555)" nz_grpc_port &&
-            read -ep "请输入Agent 密钥: " nz_client_secret
+        echo "Please add Agent on the management panel first and record the key" &&
+            read -ep "Please enter a domain name that resolves to the IP of the panel (CDN is not available): " nz_grpc_host &&
+            read -ep "Please enter the panel RPC port: (5555)" nz_grpc_port &&
+            read -ep "Please enter the Agent key: " nz_client_secret
         if [[ -z "${nz_grpc_host}" || -z "${nz_client_secret}" ]]; then
-            echo -e "${red}所有选项都不能为空${plain}"
+            echo -e "${red}All options cannot be empty${plain}"
             before_show_menu
             return 1
         fi
@@ -258,7 +258,7 @@ modify_agent_config() {
         sed -i "/ExecStart/ s/$/${args}/" ${NZ_AGENT_SERVICE}
     fi
 
-    echo -e "Agent配置 ${green}修改成功，请稍等重启生效${plain}"
+    echo -e "Agent configuration ${green}The modification is successful, please wait for a restart to take effect${plain}"
 
     systemctl daemon-reload
     systemctl enable nezha-agent
@@ -270,12 +270,12 @@ modify_agent_config() {
 }
 
 modify_dashboard_config() {
-    echo -e "> 修改面板配置"
+    echo -e "> Modify panel configuration"
 
-    echo -e "正在下载 Docker 脚本"
+    echo -e "Downloading Docker script"
     wget -O ${NZ_DASHBOARD_PATH}/docker-compose.yaml https://${GITHUB_RAW_URL}/script/docker-compose.yaml >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo -e "${red}下载脚本失败，请检查本机能否连接 ${GITHUB_RAW_URL}${plain}"
+        echo -e "${red}The download script failed, please check whether the machine can be connected ${GITHUB_RAW_URL}${plain}"
         return 0
     fi
 
@@ -283,22 +283,22 @@ modify_dashboard_config() {
 
     wget -O ${NZ_DASHBOARD_PATH}/data/config.yaml https://${GITHUB_RAW_URL}/script/config.yaml >/dev/null 2>&1
     if [[ $? != 0 ]]; then
-        echo -e "${red}下载脚本失败，请检查本机能否连接 ${GITHUB_RAW_URL}${plain}"
+        echo -e "${red}The download script failed, please check whether the machine can be connected ${GITHUB_RAW_URL}${plain}"
         return 0
     fi
 
-    echo "关于 GitHub Oauth2 应用：在 https://github.com/settings/developers 创建，无需审核，Callback 填 http(s)://域名或IP/oauth2/callback" &&
+    echo "About the GitHub Oauth2 app：在 https://github.com/settings/developers Create, no need to review, Callback fill http(s)://域名或IP/oauth2/callback" &&
         echo "关于 Gitee Oauth2 应用：在 https://gitee.com/oauth/applications 创建，无需审核，Callback 填 http(s)://域名或IP/oauth2/callback" &&
         read -ep "请输入 OAuth2 提供商(gitee/github，默认 github): " nz_oauth2_type &&
         read -ep "请输入 Oauth2 应用的 Client ID: " nz_github_oauth_client_id &&
         read -ep "请输入 Oauth2 应用的 Client Secret: " nz_github_oauth_client_secret &&
-        read -ep "请输入 GitHub/Gitee 登录名作为管理员，多个以逗号隔开: " nz_admin_logins &&
-        read -ep "请输入站点标题: " nz_site_title &&
-        read -ep "请输入站点访问端口: (8008)" nz_site_port &&
-        read -ep "请输入用于 Agent 接入的 RPC 端口: (5555)" nz_grpc_port
+        read -ep "请输入 GitHub/Gitee Login name as administrator, multiple separated by comma: " nz_admin_logins &&
+        read -ep "Please enter a site title: " nz_site_title &&
+        read -ep "Please enter the site access port: (8008)" nz_site_port &&
+        read -ep "Please enter the RPC port for Agent access: (5555)" nz_grpc_port
 
     if [[ -z "${nz_admin_logins}" || -z "${nz_github_oauth_client_id}" || -z "${nz_github_oauth_client_secret}" || -z "${nz_site_title}" ]]; then
-        echo -e "${red}所有选项都不能为空${plain}"
+        echo -e "${red}All options cannot be empty${plain}"
         before_show_menu
         return 1
     fi
@@ -333,7 +333,7 @@ modify_dashboard_config() {
 }
 
 restart_and_update() {
-    echo -e "> 重启并更新面板"
+    echo -e "> Reboot and update the panel"
 
     cd $NZ_DASHBOARD_PATH
     docker-compose pull
@@ -352,13 +352,13 @@ restart_and_update() {
 }
 
 start_dashboard() {
-    echo -e "> 启动面板"
+    echo -e "> launchpad"
 
     cd $NZ_DASHBOARD_PATH && docker-compose up -d
     if [[ $? == 0 ]]; then
-        echo -e "${green}哪吒监控 启动成功${plain}"
+        echo -e "${green}Nezha monitoring started successfully${plain}"
     else
-        echo -e "${red}启动失败，请稍后查看日志信息${plain}"
+        echo -e "${red}Startup failed, please check the log information later${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -367,13 +367,13 @@ start_dashboard() {
 }
 
 stop_dashboard() {
-    echo -e "> 停止面板"
+    echo -e "> stop panel"
 
     cd $NZ_DASHBOARD_PATH && docker-compose down
     if [[ $? == 0 ]]; then
-        echo -e "${green}哪吒监控 停止成功${plain}"
+        echo -e "${green}Nezha monitoring stopped successfully${plain}"
     else
-        echo -e "${red}停止失败，请稍后查看日志信息${plain}"
+        echo -e "${red}Stop failed, please check log information later${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -382,7 +382,7 @@ stop_dashboard() {
 }
 
 show_dashboard_log() {
-    echo -e "> 获取面板日志"
+    echo -e "> Get panel log"
 
     cd $NZ_DASHBOARD_PATH && docker-compose logs -f
 
@@ -392,7 +392,7 @@ show_dashboard_log() {
 }
 
 uninstall_dashboard() {
-    echo -e "> 卸载管理面板"
+    echo -e "> Uninstall the admin panel"
 
     cd $NZ_DASHBOARD_PATH &&
         docker-compose down
@@ -407,7 +407,7 @@ uninstall_dashboard() {
 }
 
 show_agent_log() {
-    echo -e "> 获取Agent日志"
+    echo -e "> Get Agent logs"
 
     journalctl -xf -u nezha-agent.service
 
@@ -417,7 +417,7 @@ show_agent_log() {
 }
 
 uninstall_agent() {
-    echo -e "> 卸载Agent"
+    echo -e "> Uninstall Agent"
 
     systemctl disable nezha-agent.service
     systemctl stop nezha-agent.service
@@ -433,7 +433,7 @@ uninstall_agent() {
 }
 
 restart_agent() {
-    echo -e "> 重启Agent"
+    echo -e "> Restart Agent"
 
     systemctl restart nezha-agent.service
 
@@ -471,7 +471,7 @@ show_usage() {
 
 show_menu() {
     echo -e "
-    ${green}哪吒监控管理脚本${plain} ${red}${NZ_VERSION}${plain}
+    ${green}Nezha monitoring and management script${plain} ${red}${NZ_VERSION}${plain}
     --- https://github.com/naiba/nezha ---
     ${green}1.${plain}  Install panel end
     ${green}2.${plain}  Modify panel configuration
@@ -537,7 +537,7 @@ show_menu() {
         update_script
         ;;
     *)
-        echo -e "${red}请输入正确的数字 [0-13]${plain}"
+        echo -e "${red}Please enter the correct number [0-13]${plain}"
         ;;
     esac
 }
