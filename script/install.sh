@@ -323,7 +323,7 @@ modify_dashboard_config() {
     sed -i "s/nz_grpc_port/${nz_grpc_port}/g" ${NZ_DASHBOARD_PATH}/docker-compose.yaml
     sed -i "s/nz_image_url/${Docker_IMG}/" ${NZ_DASHBOARD_PATH}/docker-compose.yaml
 
-    echo -e "面板配置 ${green}修改成功，请稍等重启生效${plain}"
+    echo -e "Panel configuration ${green}The modification is successful, please wait for a restart to take effect${plain}"
 
     restart_and_update
 
@@ -340,10 +340,10 @@ restart_and_update() {
     docker-compose down
     docker-compose up -d
     if [[ $? == 0 ]]; then
-        echo -e "${green}哪吒监控 重启成功${plain}"
-        echo -e "默认管理面板地址：${yellow}域名:站点访问端口${plain}"
+        echo -e "${green}Nezha monitoring restarted successfully${plain}"
+        echo -e "Default admin panel address: ${yellow}Domain name: site access port${plain}"
     else
-        echo -e "${red}重启失败，可能是因为启动时间超过了两秒，请稍后查看日志信息${plain}"
+        echo -e "${red}The restart failed, maybe because the startup time exceeded two seconds, please check the log information later${plain}"
     fi
 
     if [[ $# == 0 ]]; then
