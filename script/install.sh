@@ -119,7 +119,7 @@ update_script() {
 }
 
 before_show_menu() {
-    echo && echo -n -e "${yellow}* 按回车返回主菜单 *${plain}" && read temp
+    echo && echo -n -e "${yellow}* Press enter to return to the main menu *${plain}" && read temp
     show_menu
 }
 
