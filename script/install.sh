@@ -69,7 +69,7 @@ pre_check() {
     fi
 
     if [[ -z "${CN}" ]]; then
-        GITHUB_RAW_URL="raw.githubusercontent.com/naiba/nezha/master"
+        GITHUB_RAW_URL="raw.githubusercontent.com/MartijnLindeman/nezha/master"
         GITHUB_URL="github.com"
         Get_Docker_URL="get.docker.com"
         Get_Docker_Argu=" "
