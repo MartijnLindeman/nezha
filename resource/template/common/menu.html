@@ -5,16 +5,16 @@
             <img src="/static/logo.svg?v20210804">
         </div>
         {{if .IsAdminPage}}
-        <a class='item{{if eq .MatchedPath "/server"}} active{{end}}' href="/server"><i class="server icon"></i>主机</a>
-        <a class='item{{if eq .MatchedPath "/monitor"}} active{{end}}' href="/monitor"><i class="rss icon"></i>服务</a>
-        <a class='item{{if eq .MatchedPath "/cron"}} active{{end}}' href="/cron"><i class="clock icon"></i>任务</a>
-        <a class='item{{if eq .MatchedPath "/notification"}} active{{end}}' href="/notification"><i class="bell icon"></i>报警</a>
+        <a class='item{{if eq .MatchedPath "/server"}} active{{end}}' href="/server"><i class="server icon"></i>Host</a>
+        <a class='item{{if eq .MatchedPath "/monitor"}} active{{end}}' href="/monitor"><i class="rss icon"></i>Serve</a>
+        <a class='item{{if eq .MatchedPath "/cron"}} active{{end}}' href="/cron"><i class="clock icon"></i>Task</a>
+        <a class='item{{if eq .MatchedPath "/notification"}} active{{end}}' href="/notification"><i class="bell icon"></i>Call the police</a>
         <a class='item{{if eq .MatchedPath "/setting"}} active{{end}}' href="/setting">
-            <i class="settings icon"></i>设置
+            <i class="settings icon"></i>Set up
         </a>
         {{else}}
-        <a class='item{{if eq .MatchedPath "/"}} active{{end}}' href="/"><i class="home icon"></i>首页</a>
-        <a class='item{{if eq .MatchedPath "/service"}} active{{end}}' href="/service"><i class="rss icon"></i>服务</a>
+        <a class='item{{if eq .MatchedPath "/"}} active{{end}}' href="/"><i class="home icon"></i>front page</a>
+        <a class='item{{if eq .MatchedPath "/service"}} active{{end}}' href="/service"><i class="rss icon"></i>Serve</a>
         {{end}}
         <div class="right menu">
             <div class="item">
@@ -27,20 +27,20 @@
                     <div class="menu">
                         {{if .IsAdminPage}}
                         <a class="item" href="/">
-                            <i class="chart area icon"></i>返回前台
+                            <i class="chart area icon"></i>Back to the foreground
                         </a>
                         {{else}}
                         <a class="item" href="/server">
-                            <i class="terminal icon"></i>管理后台
+                            <i class="terminal icon"></i>Management background
                         </a>
                         {{end}}
-                        <button class="item" onclick="showConfirm('确认注销？','注销后您必须重新登录才能使用',logout,{{.Admin.ID}})">
-                            <i class="logout icon"></i>注销登录
+                        <button class="item" onclick="showConfirm('Confirm logout？','After logging out you must log back in to use',logout,{{.Admin.ID}})">
+                            <i class="logout icon"></i>Logout
                         </button>
                     </div>
                 </div>
                 {{else}}
-                <a href="/login" class="ui large positive nezha-primary-btn button"><i class="sign-in icon"></i>登录</a>
+                <a href="/login" class="ui large positive nezha-primary-btn button"><i class="sign-in icon"></i>Log in</a>
                 {{end}}
             </div>
         </div>
