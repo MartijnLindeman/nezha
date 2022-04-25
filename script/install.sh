@@ -73,7 +73,7 @@ pre_check() {
         GITHUB_URL="github.com"
         Get_Docker_URL="get.docker.com"
         Get_Docker_Argu=" "
-        Docker_IMG="ghcr.io\/MartijnLindeman\/nezha-dashboard"
+        Docker_IMG="ghcr.io\/martijnlindeman\/nezha-dashboard"
     else
         GITHUB_RAW_URL="cdn.jsdelivr.net/gh/MartijnLindeman/nezha@master"
         GITHUB_URL="dn-dao-github-mirror.daocloud.io"
@@ -183,9 +183,9 @@ install_agent() {
 
     echo -e "Getting the monitoring agent version number"
 
-    local version=$(curl -m 10 -sL "https://api.github.com/repos/naiba/nezha/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
+    local version=$(curl -m 10 -sL "https://api.github.com/repos/MartijnLindeman/nezha/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
     if [ ! -n "$version" ]; then
-        version=$(curl -m 10 -sL "https://cdn.jsdelivr.net/gh/naiba/nezha/" | grep "option\.value" | awk -F "'" '{print $2}' | sed 's/naiba\/nezha@/v/g')
+        version=$(curl -m 10 -sL "https://cdn.jsdelivr.net/gh/MartijnLindeman/nezha/" | grep "option\.value" | awk -F "'" '{print $2}' | sed 's/naiba\/nezha@/v/g')
     fi
 
     if [ ! -n "$version" ]; then
@@ -200,7 +200,7 @@ install_agent() {
     chmod 777 -R $NZ_AGENT_PATH
 
     echo -e "Downloading monitor"
-    wget -O nezha-agent_linux_${os_arch}.tar.gz https://${GITHUB_URL}/naiba/nezha/releases/download/${version}/nezha-agent_linux_${os_arch}.tar.gz >/dev/null 2>&1
+    wget -O nezha-agent_linux_${os_arch}.tar.gz https://${GITHUB_URL}/MartijnLindeman/nezha/releases/download/${version}/nezha-agent_linux_${os_arch}.tar.gz >/dev/null 2>&1
     if [[ $? != 0 ]]; then
         echo -e "${red}Release 下载失败，请检查本机能否连接 ${GITHUB_URL}${plain}"
         return 0
