@@ -3,7 +3,7 @@ name: Dashboard image
 on:
   workflow_run:
     workflows: ["Run Tests"]
-    branches: [master]
+    branches: [main]
     types:
       - completed
 
